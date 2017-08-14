@@ -29,7 +29,8 @@ The program must be able to handle input files consisting of more than one billi
 integers. Please make an effort to make your sum program perform well for larger
 inputs.
 
-###Solution
+### Solution ###  
+
 The approach is for SSD where parallel reads can have a place.  
 After some measurements found out that work of arithmetic sum operations two times faster than reading data from disk for the same batch of bytes. This relation can be expressed like  `1 : 2` or `0.33 : 0.67` based on 1. 
 During startup program checks available number of cores and distribute work among them according percentage above. 
@@ -37,11 +38,16 @@ Pool of Readers reads data by chunks from different parts of file in parallel ma
 Pool of Adders sums numbers from chunks taken from the queue.
 Plain `int` is enough to store unsigned integer from input.
 Resulting sum of numbers can be stored in `long` because 64-bit unsigned integer also fits in plain `long`.
-Actual result is interpreted as 64-bit unsigned integer.
+Actual result is interpreted as 64-bit unsigned integer. Tested in front of 10GB ~ 2.5 billions of numbers.
 Also added check for overflow of result.  
 For HDD with sequential access will be enough to have one worker for reading and one worker for calculations because calculations faster that reading and only one reading thread can be served by OS.
 
-To package in distributive zip with executable script
+To package in distributive zip with executable script run:
 ```
 shell$ gradlew distZip
+```
+
+To start program run:
+```
+shell$ ./sum ../path/to/file/billions_of_integers.txt
 ```
