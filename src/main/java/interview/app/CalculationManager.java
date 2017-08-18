@@ -44,7 +44,7 @@ class CalculationManager {
             readers.remove(r);
             readersLatch.countDown();
         } else {
-            error(new UnauthorizedNotificationException("Notification from unknown reader: " + r));
+            reportError(new UnauthorizedNotificationException("Notification from unknown reader: " + r));
         }
     }
 
@@ -55,10 +55,10 @@ class CalculationManager {
             try {
                 this.total = CalculationUtil.sumUnsigned(total, a.getTotal());
             } catch (Exception e) {
-                error(e);
+                reportError(e);
             }
         } else {
-            error(new UnauthorizedNotificationException("Notification from unknown adder: " + a));
+            reportError(new UnauthorizedNotificationException("Notification from unknown adder: " + a));
         }
     }
 
@@ -70,7 +70,7 @@ class CalculationManager {
         try {
             q.put(chunk);
         } catch (Exception e) {
-            error(e);
+            reportError(e);
         }
     }
 
@@ -78,12 +78,12 @@ class CalculationManager {
         try {
             return q.poll(100, TimeUnit.MICROSECONDS);
         } catch (Exception e) {
-            error(e);
+            reportError(e);
         }
         return null;
     }
 
-    public void error(Exception e) {
+    public void reportError(Exception e) {
         this.error = e;
         while (readersLatch.getCount() > 0) {
             readersLatch.countDown();

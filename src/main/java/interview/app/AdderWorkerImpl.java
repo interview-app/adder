@@ -29,7 +29,7 @@ class AdderWorkerImpl implements AdderWorker {
 
             calculationManager.adderFinished(this);
         } catch (Exception e) {
-            calculationManager.error(e);
+            calculationManager.reportError(e);
         }
     }
 

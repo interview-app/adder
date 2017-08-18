@@ -3,9 +3,13 @@ package interview.app;
 interface CalculationUtil {
 
     static long sumUnsigned(long unsignedLeft, long unsignedRight) throws NumberOverflowException {
+        if (unsignedLeft < 0 && unsignedLeft < 0) {//overflow for sure
+            throw new NumberOverflowException("Maximum value 2^64 reached.");
+        }
+
         long result = unsignedLeft + unsignedRight;//if both negative the every part is bigger then half then this is overflow
 
-        if (unsignedLeft < 0 && unsignedLeft < 0 || (((unsignedLeft < 0 && unsignedRight > 0) || (unsignedLeft > 0 && unsignedRight < 0)) && result >= 0)) {
+        if (((unsignedLeft < 0 && unsignedRight > 0) || (unsignedLeft > 0 && unsignedRight < 0)) && result >= 0) {
             throw new NumberOverflowException("Maximum value 2^64 reached.");
         }
 

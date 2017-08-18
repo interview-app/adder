@@ -19,8 +19,7 @@ class ReaderWorkerImpl implements ReaderWorker {
 
     @Override
     public void run() {
-        try {
-            RandomAccessFile f = new RandomAccessFile(path, "r");
+        try (RandomAccessFile f = new RandomAccessFile(path, "r")){
             f.seek(from);
 
             long len = to - from;
@@ -45,7 +44,7 @@ class ReaderWorkerImpl implements ReaderWorker {
 
             calculationManager.readerFinished(this);
         } catch (Exception e) {
-            calculationManager.error(e);
+            calculationManager.reportError(e);
         }
     }
 
